@@ -76,7 +76,7 @@
         <!--Navigation Controller-->
         <scene sceneID="LEI-5R-7m6">
             <objects>
-                <navigationController storyboardIdentifier="OnBoardingNavigationViewController" automaticallyAdjustsScrollViewInsets="NO" id="Aca-I3-3U9" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OnBoardingNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Aca-I3-3U9" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ler-MB-TvC">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>

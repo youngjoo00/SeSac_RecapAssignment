@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window = UIWindow(windowScene: scene)
             
             let sb = UIStoryboard(name: "OnBoarding", bundle: nil)
-            let nav = sb.instantiateViewController(identifier: "OnBoardingNavigationViewController") as! UINavigationController
+            let nav = sb.instantiateViewController(identifier: "OnBoardingNavigationController") as! UINavigationController
             
             window?.rootViewController = nav
             
@@ -37,9 +37,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let sb = UIStoryboard(name: "Main", bundle: nil)
             
             // tabbarController 불러오기
-            let nav = sb.instantiateViewController(identifier: "MainNavigationViewController") as! UINavigationController
+            let vc = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
                     
-            window?.rootViewController = nav
+            window?.rootViewController = vc
             
             window?.makeKeyAndVisible()
         }
