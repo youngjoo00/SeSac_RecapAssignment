@@ -13,8 +13,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-       
-        guard let _ = (scene as? UIWindowScene) else { return }
+      
+//        UserDefaults.standard.set(false, forKey: "UserState")
+        
+        let value = UserDefaults.standard.bool(forKey: "userState")
+        
+        if !value {
+            guard let scene = (scene as? UIWindowScene) else { return }
+            
+            window = UIWindow(windowScene: scene)
+            
+            let sb = UIStoryboard(name: "OnBoarding", bundle: nil)
+            let nav = sb.instantiateViewController(identifier: "OnBoardingNavigationViewController") as! UINavigationController
+            
+            window?.rootViewController = nav
+            
+            window?.makeKeyAndVisible()
+        } else {
+            guard let scene = (scene as? UIWindowScene) else { return }
+            
+            window = UIWindow(windowScene: scene)
+            
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            
+            // tabbarController 불러오기
+            let nav = sb.instantiateViewController(identifier: "MainNavigationViewController") as! UINavigationController
+                    
+            window?.rootViewController = nav
+            
+            window?.makeKeyAndVisible()
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

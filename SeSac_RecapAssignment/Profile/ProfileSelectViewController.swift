@@ -12,6 +12,7 @@ class ProfileSelectViewController: UIViewController {
     @IBOutlet var mainImageView: UIImageView!
     @IBOutlet var profileImageView: [UIImageView]!
     
+    var selectImageNumber = 0
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +27,7 @@ class ProfileSelectViewController: UIViewController {
         
         for i in 0..<profileImageView.count {
             if profileImageView[i].tag == tag {
-                UserDefaults.standard.set(tag, forKey: "profileImage")
+                UserDefaults.standard.set(tag, forKey: "profile")
     
                 profileImageView[i].layer.borderWidth = 5
                 profileImageView[i].layer.borderColor = UIColor.pointColor.cgColor
@@ -47,10 +48,14 @@ extension ProfileSelectViewController {
     
     func configureUI() {
         
+        mainImageView.image = ProfileImage.profileList[selectImageNumber]
         mainImageView.layer.borderWidth = 5
         mainImageView.layer.borderColor = UIColor.pointColor.cgColor
         mainImageView.layer.cornerRadius = mainImageView.frame.width/2
         mainImageView.backgroundColor = .systemGray5
+        
+        profileImageView[selectImageNumber].layer.borderWidth = 5
+        profileImageView[selectImageNumber].layer.borderColor = UIColor.pointColor.cgColor
         
         for i in 0..<profileImageView.count {
             profileImageView[i].image = ProfileImage.profileList[i]

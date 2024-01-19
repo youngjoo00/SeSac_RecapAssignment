@@ -18,6 +18,12 @@ class ProfileViewController: UIViewController {
     @IBOutlet var nicknameLineView: UIView!
     @IBOutlet var profileBtn: UIButton!
     
+    var imageNumber = UserDefaults.standard.integer(forKey: "profile") {
+        didSet {
+            profileImageView.image = ProfileImage.profileList[imageNumber]
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,14 +34,18 @@ class ProfileViewController: UIViewController {
     // navigationTitel 이 pop 될 경우 타이틀 글자가 사라짐,,
     override func viewWillAppear(_ animated: Bool) {
         defalutNavUI(title: "프로필 설정")
+        
+        imageNumber = UserDefaults.standard.integer(forKey: "profile")
     }
     
     @IBAction func changedTextField(_ sender: UITextField) {
         validationLabel.text = validationTextField(text: sender.text!)
+        completeBtnChecked(text: validationLabel.text!)
     }
     
     @IBAction func didEndTextField(_ sender: UITextField) {
         validationLabel.text = validationTextField(text: sender.text!)
+        completeBtnChecked(text: validationLabel.text!)
     }
     
     @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
@@ -47,11 +57,24 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func completeBtnClicked(_ sender: UIButton) {
+      
+        UserDefaults.standard.set(nicknameTextField.text!, forKey: "userNickname")
+        UserDefaults.standard.set(true, forKey: "userState")
+        
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let sceneDelegate = windowScene?.delegate as? SceneDelegate
+        
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let nav = sb.instantiateViewController(identifier: "MainNavigationViewController") as! UINavigationController
+        
+        sceneDelegate?.window?.rootViewController = nav
+        sceneDelegate?.window?.makeKeyAndVisible()
     }
     
     @IBAction func profileBtnClicked(_ sender: UIButton) {
         let vc = storyboard?.instantiateViewController(identifier: ProfileSelectViewController.identifier) as! ProfileSelectViewController
         
+        vc.selectImageNumber = imageNumber
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -85,8 +108,17 @@ extension ProfileViewController {
         return result
     }
     
+    func completeBtnChecked(text: String) {
+        if text == "사용할 수 있는 닉네임이에요" {
+            completeBtn.isEnabled = true
+        } else {
+            completeBtn.isEnabled = false
+        }
+    }
+    
     func configureUI() {
-        profileImageView.image = ProfileImage.randomProfile
+        UserDefaults.standard.set(Int.random(in: 0...13), forKey: "profile")
+        profileImageView.image = ProfileImage.profileList[imageNumber]
         profileImageView.layer.borderWidth = 5
         profileImageView.layer.cornerRadius = profileImageView.frame.width/2
         profileImageView.layer.borderColor = UIColor.pointColor.cgColor
@@ -104,6 +136,7 @@ extension ProfileViewController {
         completeBtn.setTitle("완료", for: .normal)
         completeBtn.tintColor = .labelColor
         completeBtn.layer.cornerRadius = 8
+        completeBtn.isEnabled = false
         // 버튼 텍스트 볼드 처리 나중에 해야함
         
         validationLabel.text = "2글자 이상 10글자 미만으로 설정해주세요"
