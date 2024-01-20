@@ -31,10 +31,14 @@ class SearchViewController: UIViewController {
         
         defalutUI()
         configureUI()
-        defalutNavUI(title: naviTitle)
         configureCollectionView()
         callRequest(text: naviTitle, sort: sort)
         selectedBtn(tag: 0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        defalutNavUI(title: naviTitle)
+        searchCollectionView.reloadData()
     }
     
     @IBAction func sortBtnClicked(_ sender: UIButton) {
@@ -80,6 +84,28 @@ extension SearchViewController {
         btn.tag = tag
     }
     
+    func configureCollectionView() {
+        searchCollectionView.delegate = self
+        searchCollectionView.dataSource = self
+        searchCollectionView.prefetchDataSource = self
+        searchCollectionView.backgroundColor = .clear
+        
+        let layout = UICollectionViewFlowLayout()
+        let spacing: CGFloat = 16
+        
+        let cellWidth = (UIScreen.main.bounds.width - (spacing * 3)) / 2
+        let cellhieght = ((UIScreen.main.bounds.width - (spacing * 3)) * 1.8) / 2.5
+        
+        layout.itemSize = CGSize(width: cellWidth, height: cellhieght)
+        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        searchCollectionView.collectionViewLayout = layout
+        
+        let xib = UINib(nibName: SearchCollectionViewCell.identifier, bundle: nil)
+        searchCollectionView.register(xib, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
+    }
+    
     func callRequest(text: String, sort: String) {
         
         let query = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -95,6 +121,7 @@ extension SearchViewController {
             switch response.result {
             case .success(let data):
                 if self.start == 1 {
+                
                     self.searchList = data
                     self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
                     self.total = data.total
@@ -104,8 +131,16 @@ extension SearchViewController {
                 } else {
                     self.searchList.items.append(contentsOf: data.items)
                 }
-                print(url)
                 
+                for i in 0..<self.searchList.items.count {
+                    self.searchList.items[i].title = self.searchList.items[i].title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+                }
+                
+//                오류 : Cannot assign to property: 'item' is a 'let' constant
+//                이건 왜 오류인가요..?
+//                for item in self.searchList.items {
+//                    item.title = ""
+//                }
                 
             case .failure(let failure):
                 // 시간 남으면 검색 결과가 없을때 처리해주자
@@ -132,29 +167,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         print("cancelPrefetchingForRowsAt \(indexPaths)")
     }
     
-    
-    func configureCollectionView() {
-        searchCollectionView.delegate = self
-        searchCollectionView.dataSource = self
-        searchCollectionView.prefetchDataSource = self
-        searchCollectionView.backgroundColor = .clear
-        
-        let layout = UICollectionViewFlowLayout()
-        let spacing: CGFloat = 16
-        
-        let cellWidth = (UIScreen.main.bounds.width - (spacing * 3)) / 2
-        let cellhieght = ((UIScreen.main.bounds.width - (spacing * 3)) * 1.8) / 2.5
-        
-        layout.itemSize = CGSize(width: cellWidth, height: cellhieght)
-        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        searchCollectionView.collectionViewLayout = layout
-        
-        let xib = UINib(nibName: SearchCollectionViewCell.identifier, bundle: nil)
-        searchCollectionView.register(xib, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchList.items.count
     }
@@ -166,5 +178,11 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = storyboard?.instantiateViewController(identifier: ProductViewController.identifier) as! ProductViewController
+        
+        vc.productData = searchList.items[indexPath.row]
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

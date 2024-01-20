@@ -16,7 +16,8 @@ struct Search: Codable {
 
 // MARK: - Item
 struct Item: Codable {
-    let title, link, image, lprice, mallName, productID: String
+    var title: String
+    let link, image, lprice, mallName, productID: String
 
     enum CodingKeys: String, CodingKey {
         case title, link, image, lprice, mallName

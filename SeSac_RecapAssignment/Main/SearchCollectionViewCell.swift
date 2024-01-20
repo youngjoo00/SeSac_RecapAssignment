@@ -30,7 +30,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         } else {
             UserDefaults.standard.set(true, forKey: "\(likeBtn.tag)")
         }
-        checkedLikeBtn(tag: likeBtn.tag)
+        likeBtn.setImage(LikeBtn.checkedLikeBtn(tag: likeBtn.tag), for: .normal)
     }
     
     func configureUI() {
@@ -59,8 +59,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         productImageView.contentMode = .scaleAspectFill
         
         likeBtn.tag = Int(data.productID)!
-        checkedLikeBtn(tag: likeBtn.tag)
-
+        likeBtn.setImage(LikeBtn.checkedLikeBtn(tag: likeBtn.tag), for: .normal)
         mallNameLabel.text = data.mallName
         
 //        data.title.components(separatedBy: "<b></b>")
@@ -68,13 +67,5 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
         priceLabel.text = MyNumberFormatter.shared.string(for: Int(data.lprice)) ?? "0"
 
-    }
-    
-    func checkedLikeBtn(tag productID: Int) {
-        if UserDefaults.standard.bool(forKey: "\(productID)") {
-            likeBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        } else {
-            likeBtn.setImage(UIImage(systemName: "heart"), for: .normal)
-        }
     }
 }

@@ -87,7 +87,7 @@ extension ProfileViewController {
         var result = ""
         
         // 효율적인 코드로 수정 필요
-        let regexPattern = "^[^@#$%0-9]{2,9}$"
+        let regexPattern = #"^[^@#$%0-9]{2,9}$"#
         if let _ = text.range(of: regexPattern, options: .regularExpression) {
             result = "사용할 수 있는 닉네임이에요"
         } else {
