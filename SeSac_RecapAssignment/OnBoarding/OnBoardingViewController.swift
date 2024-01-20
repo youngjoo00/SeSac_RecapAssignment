@@ -27,6 +27,8 @@ class OnBoardingViewController: UIViewController {
         let vc = sb.instantiateViewController(withIdentifier: ProfileViewController.identifier) as! ProfileViewController
         
         navigationController?.pushViewController(vc, animated: true)
+        
+        
     }
 }
 

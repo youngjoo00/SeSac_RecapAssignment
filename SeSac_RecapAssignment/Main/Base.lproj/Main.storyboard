@@ -96,6 +96,9 @@
                                             <constraint firstAttribute="height" constant="35" id="UVR-Vq-AtA"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="sortBtnClicked:" destination="YiC-ro-GzX" eventType="touchUpInside" id="x2f-MM-MKK"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lb8-g0-tCg">
                                         <rect key="frame" x="40" y="0.0" width="30" height="35"/>
@@ -103,6 +106,9 @@
                                             <constraint firstAttribute="height" constant="35" id="zAm-1B-teV"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="sortBtnClicked:" destination="YiC-ro-GzX" eventType="touchUpInside" id="uyT-j3-abX"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ce-R8-3wb">
                                         <rect key="frame" x="80" y="0.0" width="30" height="35"/>
@@ -110,6 +116,9 @@
                                             <constraint firstAttribute="height" constant="35" id="bHf-kl-5fB"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="sortBtnClicked:" destination="YiC-ro-GzX" eventType="touchUpInside" id="Xgi-ui-Nt0"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bpj-us-VSX">
                                         <rect key="frame" x="120" y="0.0" width="30" height="35"/>
@@ -117,6 +126,9 @@
                                             <constraint firstAttribute="height" constant="35" id="7mm-Ap-aFP"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="sortBtnClicked:" destination="YiC-ro-GzX" eventType="touchUpInside" id="2rg-X4-dZe"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -157,17 +169,51 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="accuracyBtn" destination="g0X-6u-cap" id="8eb-Mp-0tw"/>
-                        <outlet property="dateBtn" destination="lb8-g0-tCg" id="JHg-e0-Y0l"/>
-                        <outlet property="highPriceBtn" destination="0Ce-R8-3wb" id="t8m-uS-0A4"/>
-                        <outlet property="lowPriceBtn" destination="bpj-us-VSX" id="0pL-G4-Yga"/>
                         <outlet property="searchCollectionView" destination="ZeT-5L-mDt" id="g0a-yV-YXz"/>
                         <outlet property="totalLabel" destination="ASO-q1-SDb" id="oiK-ao-W3h"/>
+                        <outletCollection property="sortBtns" destination="g0X-6u-cap" collectionClass="NSMutableArray" id="SY4-ss-Si5"/>
+                        <outletCollection property="sortBtns" destination="lb8-g0-tCg" collectionClass="NSMutableArray" id="2Xz-rl-eQ5"/>
+                        <outletCollection property="sortBtns" destination="0Ce-R8-3wb" collectionClass="NSMutableArray" id="84Q-Ei-nIN"/>
+                        <outletCollection property="sortBtns" destination="bpj-us-VSX" collectionClass="NSMutableArray" id="KB8-Vh-v6U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="28U-yC-jWr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5874" y="-27"/>
+        </scene>
+        <!--Product View Controller-->
+        <scene sceneID="Ccw-8c-US1">
+            <objects>
+                <viewController storyboardIdentifier="ProductViewController" id="5pb-Mx-cbI" customClass="ProductViewController" customModule="SeSac_RecapAssignment" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jkJ-Sr-dms">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oen-f7-rz9">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sMm-lk-o9g"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Oen-f7-rz9" firstAttribute="leading" secondItem="sMm-lk-o9g" secondAttribute="leading" id="4fo-rY-t67"/>
+                            <constraint firstItem="Oen-f7-rz9" firstAttribute="top" secondItem="sMm-lk-o9g" secondAttribute="top" id="Cns-bQ-pAx"/>
+                            <constraint firstItem="sMm-lk-o9g" firstAttribute="trailing" secondItem="Oen-f7-rz9" secondAttribute="trailing" id="DXz-AI-zTQ"/>
+                            <constraint firstItem="sMm-lk-o9g" firstAttribute="bottom" secondItem="Oen-f7-rz9" secondAttribute="bottom" id="pn1-aX-kQb"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="productWebView" destination="Oen-f7-rz9" id="L5c-FE-28K"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g1L-HU-jCy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6801" y="-27"/>
         </scene>
         <!--Setting-->
         <scene sceneID="bta-cR-mvi">
@@ -185,6 +231,7 @@
                 <tabBarController storyboardIdentifier="MainTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="G9L-1j-SnT" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Zbt-3Q-YAQ">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

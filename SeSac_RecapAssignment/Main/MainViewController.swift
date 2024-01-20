@@ -17,12 +17,16 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
 
         defalutUI()
-        defalutNavUI(title: "님의 새싹쇼핑")
+
         configureUI()
         
         shopSearchBar.delegate = self
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        let nickname = UserDefaults.standard.string(forKey: "userNickname")!
+        defalutNavUI(title: "\(nickname)님의 새싹쇼핑")
+    }
 }
 
 extension MainViewController {

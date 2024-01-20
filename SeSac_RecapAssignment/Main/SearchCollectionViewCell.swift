@@ -21,8 +21,18 @@ class SearchCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         
         configureUI()
+        likeBtn.addTarget(self, action: #selector(likeBtnClicked), for: .touchUpInside)
     }
-
+    
+    @objc func likeBtnClicked() {
+        if UserDefaults.standard.bool(forKey: "\(likeBtn.tag)") {
+            UserDefaults.standard.set(false, forKey: "\(likeBtn.tag)")
+        } else {
+            UserDefaults.standard.set(true, forKey: "\(likeBtn.tag)")
+        }
+        checkedLikeBtn(tag: likeBtn.tag)
+    }
+    
     func configureUI() {
         productImageView.contentMode = .scaleAspectFill
         productImageView.layer.cornerRadius = 16
@@ -48,11 +58,8 @@ class SearchCollectionViewCell: UICollectionViewCell {
         productImageView.kf.setImage(with: url)
         productImageView.contentMode = .scaleAspectFill
         
-        if UserDefaults.standard.bool(forKey: "\(data.productID)") {
-            likeBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        } else {
-            likeBtn.setImage(UIImage(systemName: "heart"), for: .normal)
-        }
+        likeBtn.tag = Int(data.productID)!
+        checkedLikeBtn(tag: likeBtn.tag)
 
         mallNameLabel.text = data.mallName
         
@@ -61,5 +68,13 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
         priceLabel.text = MyNumberFormatter.shared.string(for: Int(data.lprice)) ?? "0"
 
+    }
+    
+    func checkedLikeBtn(tag productID: Int) {
+        if UserDefaults.standard.bool(forKey: "\(productID)") {
+            likeBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        } else {
+            likeBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+        }
     }
 }

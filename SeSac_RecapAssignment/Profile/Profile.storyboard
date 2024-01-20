@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Profile View Controller-->
+        <!--Item-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="Y6W-OH-hqX" customClass="ProfileViewController" customModule="SeSac_RecapAssignment" customModuleProvider="target" sceneMemberID="viewController">
@@ -108,6 +108,7 @@
                             <outletCollection property="gestureRecognizers" destination="rih-ae-wtD" appends="YES" id="8ty-7H-rMN"/>
                         </connections>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="zWt-t7-Ajp"/>
                     <navigationItem key="navigationItem" id="ofC-bO-Xoy"/>
                     <connections>
                         <outlet property="cameraImageView" destination="l8w-im-dCa" id="03t-B7-Qtf"/>
@@ -126,9 +127,9 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="985.49618320610682" y="-28.169014084507044"/>
+            <point key="canvasLocation" x="2838.9312977099235" y="-28.169014084507044"/>
         </scene>
-        <!--Profile Select View Controller-->
+        <!--Item-->
         <scene sceneID="afV-90-W3k">
             <objects>
                 <viewController storyboardIdentifier="ProfileSelectViewController" id="s3X-H3-Yy0" customClass="ProfileSelectViewController" customModule="SeSac_RecapAssignment" customModuleProvider="target" sceneMemberID="viewController">
@@ -294,6 +295,8 @@
                             <constraint firstItem="gQI-1a-udz" firstAttribute="centerX" secondItem="AL4-4x-WUw" secondAttribute="centerX" id="rE5-Uq-7Sz"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="x1W-MX-AG3"/>
+                    <navigationItem key="navigationItem" id="7xv-BG-vay"/>
                     <connections>
                         <outlet property="mainImageView" destination="gQI-1a-udz" id="Mnh-aW-xUZ"/>
                         <outletCollection property="profileImageView" destination="T12-j9-rKm" collectionClass="NSMutableArray" id="NpA-3K-VHu"/>
@@ -314,7 +317,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8cs-ib-m7M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1994.6564885496182" y="-28.169014084507044"/>
+            <point key="canvasLocation" x="3848.0916030534349" y="-28.169014084507044"/>
         </scene>
     </scenes>
     <resources>

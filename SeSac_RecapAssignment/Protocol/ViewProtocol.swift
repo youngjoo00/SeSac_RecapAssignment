@@ -19,15 +19,20 @@ extension UIViewController: ViewProtocol {
     }
     
     func defalutNavUI(title: String) {
-        navigationItem.title = title
+        
+        // 백버튼 처리
+        self.navigationController?.navigationBar.tintColor = .labelColor
+        self.navigationController?.navigationBar.topItem?.title = ""
+        
+        // 백버튼을 처리하고 난 뒤에 타이틀을 설정해야 제대로 뷰가 그려진다.
+        self.navigationItem.title = title
         
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor : UIColor.labelColor,
-            .font: UIFont.boldSystemFont(ofSize: 20) // 볼드 처리
+            .font: UIFont.boldSystemFont(ofSize: 20)
         ]
         
-        self.navigationController?.navigationBar.tintColor = .labelColor
-        self.navigationController?.navigationBar.topItem?.title = ""
+        
     }
 }
 

@@ -11,10 +11,8 @@ import Alamofire
 class SearchViewController: UIViewController {
     
     @IBOutlet var totalLabel: UILabel!
-    @IBOutlet var accuracyBtn: UIButton!
-    @IBOutlet var dateBtn: UIButton!
-    @IBOutlet var highPriceBtn: UIButton!
-    @IBOutlet var lowPriceBtn: UIButton!
+    @IBOutlet var sortBtns: [UIButton]!
+    
     @IBOutlet var searchCollectionView: UICollectionView!
     
     var searchList: Search = Search(lastBuildDate: "", total: 0, start: 0, display: 0, items: []) {
@@ -27,41 +25,62 @@ class SearchViewController: UIViewController {
     var sort = "sim"
     var total = 0
     var naviTitle = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(naviTitle)
         defalutUI()
         configureUI()
         defalutNavUI(title: naviTitle)
         configureCollectionView()
-        callRequest(text: naviTitle)
+        callRequest(text: naviTitle, sort: sort)
+        selectedBtn(tag: 0)
+    }
+    
+    @IBAction func sortBtnClicked(_ sender: UIButton) {
+        // 내가 해당 버튼을 누르면 tag 를 알아낼 수 있음 => 태그를 통해 원시값도 가져올수있음
+        // 원시값을 sort 변수에 넣고 다시 콜 리퀘스트 가능
+        sort = "\(SearchBtn.allCases[sender.tag])"
+        start = 1
+        callRequest(text: naviTitle, sort: sort)
+        selectedBtn(tag: sender.tag)
     }
     
 }
 
 extension SearchViewController {
     
-    func configureUI() {
-        totalLabel.textColor = .pointColor
-        
-        // 이게 맞나..?
-        designBtn(accuracyBtn, title: "  정확도  ")
-        designBtn(dateBtn, title: "  날짜순  ")
-        designBtn(highPriceBtn, title: "  가격높은순  ")
-        designBtn(lowPriceBtn, title: "  가격낮은순  ")
+    func selectedBtn(tag: Int) {
+        for i in 0..<sortBtns.count {
+            if sortBtns[i].tag == tag {
+                sortBtns[i].backgroundColor = .white
+                sortBtns[i].tintColor = .black
+            } else {
+                sortBtns[i].backgroundColor = .clear
+                sortBtns[i].tintColor = .systemGray5
+            }
+        }
     }
     
-    func designBtn(_ btn: UIButton, title: String) {
-        btn.setTitle(title, for: .normal)
+    func configureUI() {
+        totalLabel.textColor = .pointColor
+
+        for i in 0..<sortBtns.count {
+            designBtn(sortBtns[i], title: SearchBtn.allCases[i].rawValue, tag: i)
+        }
+    }
+    
+    func designBtn(_ btn: UIButton, title: String, tag: Int) {
+        btn.setTitle("  \(title)  ", for: .normal)
         btn.tintColor = .systemGray5
         btn.backgroundColor = .clear
         btn.layer.borderWidth = 1
         btn.layer.cornerRadius = 8
         btn.layer.borderColor = UIColor.systemGray5.cgColor
+        btn.tag = tag
     }
     
-    func callRequest(text: String) {
+    func callRequest(text: String, sort: String) {
         
         let query = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
@@ -75,19 +94,21 @@ extension SearchViewController {
         AF.request(url, headers: headers).responseDecodable(of: Search.self) { response in
             switch response.result {
             case .success(let data):
-                print(data)
-                
                 if self.start == 1 {
                     self.searchList = data
                     self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
                     self.total = data.total
+                    if self.total != 0 {
+                        self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                    }
                 } else {
-                    // 배열에 추가
                     self.searchList.items.append(contentsOf: data.items)
-                    print(self.searchList.items)
                 }
+                print(url)
+                
                 
             case .failure(let failure):
+                // 시간 남으면 검색 결과가 없을때 처리해주자
                 print(failure)
             }
             
@@ -102,7 +123,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         for item in indexPaths {
             if searchList.items.count - 3 == item.row && searchList.items.count < total {
                 start += 30
-                callRequest(text: naviTitle)
+                callRequest(text: naviTitle, sort: sort)
             }
         }
     }
@@ -142,7 +163,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let cell = searchCollectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as! SearchCollectionViewCell
         
         cell.configureCell(data: searchList.items[indexPath.row])
-        print(indexPath.row)
         return cell
     }
     

@@ -14,10 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
       
-//        UserDefaults.standard.set(false, forKey: "UserState")
+//        UserDefaults.standard.set(false, forKey: "userState")
         
         let value = UserDefaults.standard.bool(forKey: "userState")
-        
+
         if !value {
             guard let scene = (scene as? UIWindowScene) else { return }
             

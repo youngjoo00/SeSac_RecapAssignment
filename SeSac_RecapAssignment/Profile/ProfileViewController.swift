@@ -65,9 +65,9 @@ class ProfileViewController: UIViewController {
         let sceneDelegate = windowScene?.delegate as? SceneDelegate
         
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        let nav = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
+        let tc = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
         
-        sceneDelegate?.window?.rootViewController = nav
+        sceneDelegate?.window?.rootViewController = tc
         sceneDelegate?.window?.makeKeyAndVisible()
     }
     
