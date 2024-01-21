@@ -26,6 +26,10 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let nickname = UserDefaults.standard.string(forKey: "userNickname")!
         defalutNavUI(title: "\(nickname)님의 새싹쇼핑")
+        print(UserDefaults.standard.integer(forKey: "likeCount"))
+    }
+    @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
 }
 
@@ -49,6 +53,7 @@ extension MainViewController: UISearchBarDelegate {
         let vc = storyboard?.instantiateViewController(identifier: SearchViewController.identifier) as! SearchViewController
         
         vc.naviTitle = searchBar.text!
+        view.endEditing(true)
         navigationController?.pushViewController(vc, animated: true)
     }
 }

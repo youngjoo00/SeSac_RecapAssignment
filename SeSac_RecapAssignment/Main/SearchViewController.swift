@@ -42,8 +42,6 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func sortBtnClicked(_ sender: UIButton) {
-        // 내가 해당 버튼을 누르면 tag 를 알아낼 수 있음 => 태그를 통해 원시값도 가져올수있음
-        // 원시값을 sort 변수에 넣고 다시 콜 리퀘스트 가능
         sort = "\(SearchBtn.allCases[sender.tag])"
         start = 1
         callRequest(text: naviTitle, sort: sort)

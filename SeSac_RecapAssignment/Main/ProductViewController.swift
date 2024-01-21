@@ -40,11 +40,7 @@ extension ProductViewController {
     }
     
     @objc func rightBarButtonItemClicked() {
-        if UserDefaults.standard.bool(forKey: productData.productID) {
-            UserDefaults.standard.set(false, forKey: productData.productID)
-        } else {
-            UserDefaults.standard.set(true, forKey: productData.productID)
-        }
+        LikeBtn.clickedLikeBtn(key: Int(productData.productID)!)
         configureRightBarButton()
     }
 }

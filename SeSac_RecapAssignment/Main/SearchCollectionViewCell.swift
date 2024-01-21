@@ -25,11 +25,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func likeBtnClicked() {
-        if UserDefaults.standard.bool(forKey: "\(likeBtn.tag)") {
-            UserDefaults.standard.set(false, forKey: "\(likeBtn.tag)")
-        } else {
-            UserDefaults.standard.set(true, forKey: "\(likeBtn.tag)")
-        }
+        LikeBtn.clickedLikeBtn(key: likeBtn.tag)
         likeBtn.setImage(LikeBtn.checkedLikeBtn(tag: likeBtn.tag), for: .normal)
     }
     
@@ -62,7 +58,6 @@ class SearchCollectionViewCell: UICollectionViewCell {
         likeBtn.setImage(LikeBtn.checkedLikeBtn(tag: likeBtn.tag), for: .normal)
         mallNameLabel.text = data.mallName
         
-//        data.title.components(separatedBy: "<b></b>")
         titleLabel.text = data.title
         
         priceLabel.text = MyNumberFormatter.shared.string(for: Int(data.lprice)) ?? "0"

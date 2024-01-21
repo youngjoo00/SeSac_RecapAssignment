@@ -22,4 +22,14 @@ enum LikeBtn {
             return UIImage(systemName: "heart")
         }
     }
+    
+    static func clickedLikeBtn(key: Int) {
+        if UserDefaults.standard.bool(forKey: "\(key)") {
+            UserDefaults.standard.set(false, forKey: "\(key)")
+            UserDefaults.standard.set(UserDefaults.standard.integer(forKey: "likeCount")-1, forKey: "likeCount")
+        } else {
+            UserDefaults.standard.set(true, forKey: "\(key)")
+            UserDefaults.standard.set(UserDefaults.standard.integer(forKey: "likeCount")+1, forKey: "likeCount")
+        }
+    }
 }
