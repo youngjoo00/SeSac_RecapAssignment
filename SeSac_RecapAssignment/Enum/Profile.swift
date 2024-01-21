@@ -1,8 +1,8 @@
 //
-//  ProfileImage.swift
+//  Profile.swift
 //  SeSac_RecapAssignment
 //
-//  Created by youngjoo on 1/18/24.
+//  Created by youngjoo on 1/22/24.
 //
 
 import UIKit

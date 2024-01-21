@@ -1,13 +1,13 @@
 //
-//  ProfileViewController.swift
+//  EditProfileViewController.swift
 //  SeSac_RecapAssignment
 //
-//  Created by youngjoo on 1/18/24.
+//  Created by youngjoo on 1/22/24.
 //
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class EditProfileViewController: UIViewController {
 
     @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var cameraImageView: UIImageView!
@@ -30,44 +30,22 @@ class ProfileViewController: UIViewController {
         configureUI()
     }
 
-    // navigationTitel 이 pop 될 경우 타이틀 글자가 사라짐,,
     override func viewWillAppear(_ animated: Bool) {
-        defalutNavUI(title: "프로필 설정")
+        defalutNavUI(title: "프로필 수정")
         
         imageNumber = UserDefaults.standard.integer(forKey: "profile")
-    }
-    
-    @IBAction func changedTextField(_ sender: UITextField) {
-        validationLabel.text = validationTextField(text: sender.text!)
-        completeBtnChecked(text: validationLabel.text!)
-    }
-    
-    @IBAction func didEndTextField(_ sender: UITextField) {
-        validationLabel.text = validationTextField(text: sender.text!)
-        completeBtnChecked(text: validationLabel.text!)
     }
     
     @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 
-    @IBAction func returnKeyboardClicked(_ sender: UITextField) {
-        view.endEditing(true)
-    }
     
     @IBAction func completeBtnClicked(_ sender: UIButton) {
       
         UserDefaults.standard.set(nicknameTextField.text!, forKey: "userNickname")
-        UserDefaults.standard.set(true, forKey: "userState")
         
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        let sceneDelegate = windowScene?.delegate as? SceneDelegate
-        
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let tc = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
-        
-        sceneDelegate?.window?.rootViewController = tc
-        sceneDelegate?.window?.makeKeyAndVisible()
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func profileBtnClicked(_ sender: UIButton) {
@@ -78,7 +56,7 @@ class ProfileViewController: UIViewController {
     }
 }
 
-extension ProfileViewController {
+extension EditProfileViewController {
     
     // 이것도 싱글톤처럼 따로 빼서 쓸 수 있을듯
     func validationTextField(text: String) -> String {
@@ -116,7 +94,6 @@ extension ProfileViewController {
     }
     
     func configureUI() {
-        UserDefaults.standard.set(Int.random(in: 0...13), forKey: "profile")
         profileImageView.image = ProfileImage.profileList[imageNumber]
         profileImageView.layer.borderWidth = 5
         profileImageView.layer.cornerRadius = profileImageView.frame.width/2
@@ -124,6 +101,8 @@ extension ProfileViewController {
         
         cameraImageView.image = UIImage(named: "camera")
         
+        nicknameTextField.delegate = self
+        nicknameTextField.text = UserDefaults.standard.string(forKey: "userNickname")
         nicknameTextField.textColor = .labelColor
         nicknameTextField.backgroundColor = .clear
         nicknameTextField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요 :)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
@@ -136,13 +115,29 @@ extension ProfileViewController {
         completeBtn.tintColor = .labelColor
         completeBtn.layer.cornerRadius = 8
         completeBtn.isEnabled = false
-        // 버튼 텍스트 볼드 처리 나중에 해야함
         
-        validationLabel.text = "2글자 이상 10글자 미만으로 설정해주세요"
+        validationLabel.text = validationTextField(text: nicknameTextField.text!)
         
         nicknameLineView.backgroundColor = .lightGray
         
         profileBtn.setTitle("", for: .normal)
     }
     
+}
+
+extension EditProfileViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        validationLabel.text = validationTextField(text: textField.text!)
+        completeBtnChecked(text: validationLabel.text!)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        validationLabel.text = validationTextField(text: textField.text!)
+        completeBtnChecked(text: validationLabel.text!)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
 }

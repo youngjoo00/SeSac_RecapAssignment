@@ -12,6 +12,10 @@ protocol ViewProtocol {
     func defalutNavUI(title: String)
 }
 
+protocol CellProtocol {
+    func defalutUI()
+}
+
 extension UIViewController: ViewProtocol {
 
     func defalutUI() {
@@ -36,3 +40,9 @@ extension UIViewController: ViewProtocol {
     }
 }
 
+extension UITableViewCell: CellProtocol {
+    func defalutUI() {
+        backgroundColor = .darkGray
+        selectionStyle = .none
+    }
+}

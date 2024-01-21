@@ -15,7 +15,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
       
 //        UserDefaults.standard.set(false, forKey: "userState")
+//        
 //        UserDefaults.standard.setValue(0, forKey: "likeCount")
+        
         let value = UserDefaults.standard.bool(forKey: "userState")
 
         if !value {
