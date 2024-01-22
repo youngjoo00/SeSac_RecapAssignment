@@ -14,6 +14,14 @@ enum SearchBtn: String, CaseIterable {
     case asc = "가격낮은순"
 }
 
+enum SearchList {
+    static var list: [String] = UserDefaults.standard.array(forKey: "searchList") as? [String] ?? [] {
+        didSet {
+            UserDefaults.standard.set(SearchList.list, forKey: "searchList")
+        }
+    }
+}
+
 enum LikeBtn {
     static func checkedLikeBtn(tag productID: Int) -> UIImage? {
         if UserDefaults.standard.bool(forKey: "\(productID)") {

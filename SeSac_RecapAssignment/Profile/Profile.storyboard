@@ -54,13 +54,6 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="changedTextField:" destination="Y6W-OH-hqX" eventType="editingDidEnd" id="Hd0-79-hhx"/>
-                                    <action selector="changedTextField:" destination="Y6W-OH-hqX" eventType="editingChanged" id="e8m-xZ-a9g"/>
-                                    <action selector="didEndTextField:" destination="Y6W-OH-hqX" eventType="editingDidEnd" id="2QC-me-RoM"/>
-                                    <action selector="returnKeyboardClicked:" destination="Y6W-OH-hqX" eventType="editingDidEndOnExit" id="E0L-dX-ZsY"/>
-                                    <action selector="returnKeyboardClicked:" destination="Y6W-OH-hqX" eventType="editingDidEnd" id="sFY-GO-c3X"/>
-                                </connections>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y46-zu-Thm">
                                 <rect key="frame" x="16" y="269.33333333333331" width="361" height="2"/>

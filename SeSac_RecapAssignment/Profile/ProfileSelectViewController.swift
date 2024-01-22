@@ -21,24 +21,8 @@ class ProfileSelectViewController: UIViewController {
         configureUI()
     }
     
-    // 나중에 효율적인 방법으로 개선
     @objc func viewTapped(_ sender: UITapGestureRecognizer) {
-        let tag = sender.view!.tag
-        
-        for i in 0..<profileImageView.count {
-            if profileImageView[i].tag == tag {
-                UserDefaults.standard.set(tag, forKey: "profile")
-    
-                profileImageView[i].layer.borderWidth = 5
-                profileImageView[i].layer.borderColor = UIColor.pointColor.cgColor
-                
-                mainImageView.image = ProfileImage.profileList[tag]
-            } else {
-                profileImageView[i].layer.borderWidth = 0
-                profileImageView[i].layer.borderColor = .none
-            }
-        }
-       
+        ProfileImage.configureSelectedView(profileImageViews: profileImageView, mainImageView: mainImageView, userDefaultsKey: "profile", selectedImageViewTag: sender.view!.tag)
     }
     
 
@@ -48,20 +32,10 @@ extension ProfileSelectViewController {
     
     func configureUI() {
         
-        mainImageView.image = ProfileImage.profileList[selectImageNumber]
-        mainImageView.layer.borderWidth = 5
-        mainImageView.layer.borderColor = UIColor.pointColor.cgColor
-        mainImageView.layer.cornerRadius = mainImageView.frame.width/2
-        mainImageView.backgroundColor = .systemGray5
-        
-        profileImageView[selectImageNumber].layer.borderWidth = 5
-        profileImageView[selectImageNumber].layer.borderColor = UIColor.pointColor.cgColor
+        ProfileImage.configureMainView(mainImageView, index: selectImageNumber)
+        ProfileImage.configureViews(profileImageView, index: selectImageNumber)
         
         for i in 0..<profileImageView.count {
-            profileImageView[i].image = ProfileImage.profileList[i]
-            profileImageView[i].layer.cornerRadius = profileImageView[i].frame.width/2
-            profileImageView[i].tag = i
-            profileImageView[i].isUserInteractionEnabled = true
             profileImageView[i].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
         }
     }

@@ -290,6 +290,23 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="0St-Wp-xWs"/>
                     <navigationItem key="navigationItem" id="mwS-YS-M5w"/>
+                    <connections>
+                        <outlet property="mainImageView" destination="2fW-En-34U" id="glm-vV-PvY"/>
+                        <outletCollection property="profileImageView" destination="xtB-wg-wIt" collectionClass="NSMutableArray" id="0mP-4z-Yzg"/>
+                        <outletCollection property="profileImageView" destination="7ql-DT-ngn" collectionClass="NSMutableArray" id="BQN-t5-glA"/>
+                        <outletCollection property="profileImageView" destination="gdI-wq-URj" collectionClass="NSMutableArray" id="op8-m6-3I1"/>
+                        <outletCollection property="profileImageView" destination="oUU-ZE-g4O" collectionClass="NSMutableArray" id="TLY-Rq-gns"/>
+                        <outletCollection property="profileImageView" destination="2yE-4j-dn6" collectionClass="NSMutableArray" id="Vxg-G0-LCW"/>
+                        <outletCollection property="profileImageView" destination="9kq-vJ-tbq" collectionClass="NSMutableArray" id="Hym-mO-kso"/>
+                        <outletCollection property="profileImageView" destination="UzV-Pj-SWu" collectionClass="NSMutableArray" id="08f-KB-ZYt"/>
+                        <outletCollection property="profileImageView" destination="8kg-em-Beg" collectionClass="NSMutableArray" id="zNt-DC-Uqv"/>
+                        <outletCollection property="profileImageView" destination="I37-KK-npW" collectionClass="NSMutableArray" id="VXl-ar-fks"/>
+                        <outletCollection property="profileImageView" destination="0nt-St-Vyl" collectionClass="NSMutableArray" id="tkH-Sb-m0W"/>
+                        <outletCollection property="profileImageView" destination="X5k-N3-nT5" collectionClass="NSMutableArray" id="tVY-eY-SQy"/>
+                        <outletCollection property="profileImageView" destination="4PL-B7-aX3" collectionClass="NSMutableArray" id="SXw-vf-28Y"/>
+                        <outletCollection property="profileImageView" destination="QPN-JQ-OdR" collectionClass="NSMutableArray" id="zeS-Eb-L4L"/>
+                        <outletCollection property="profileImageView" destination="pOS-VE-5I5" collectionClass="NSMutableArray" id="LW4-2a-OQd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jK8-RV-qJx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

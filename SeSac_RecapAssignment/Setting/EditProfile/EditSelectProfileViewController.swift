@@ -8,22 +8,42 @@
 import UIKit
 
 class EditSelectProfileViewController: UIViewController {
-
+    
+    @IBOutlet var mainImageView: UIImageView!
+    @IBOutlet var profileImageView: [UIImageView]!
+    
+    var selectImageNumber = UserDefaults.standard.integer(forKey: "profile")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        if let tempImage = UserDefaults.standard.string(forKey: "tempProfile") {
+            selectImageNumber = Int(tempImage)!
+        } else {
+            selectImageNumber = UserDefaults.standard.integer(forKey: "profile")
+        }
+        
+        defalutUI()
+        defalutNavUI(title: "프로필 설정")
+        configureUI()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func viewTapped(_ sender: UITapGestureRecognizer) {
+        ProfileImage.configureSelectedView(profileImageViews: profileImageView, mainImageView: mainImageView, userDefaultsKey: "tempProfile", selectedImageViewTag: sender.view!.tag)
     }
-    */
+    
+}
 
+extension EditSelectProfileViewController {
+    
+    func configureUI() {
+        
+        ProfileImage.configureMainView(mainImageView, index: selectImageNumber)
+        ProfileImage.configureViews(profileImageView, index: selectImageNumber)
+        
+        for i in 0..<profileImageView.count {
+            profileImageView[i].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
+        }
+    }
+    
 }
