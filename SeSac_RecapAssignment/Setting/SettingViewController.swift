@@ -29,7 +29,7 @@ extension SettingViewController {
         settingTableView.delegate = self
         settingTableView.dataSource = self
         settingTableView.backgroundColor = .clear
-
+        settingTableView.isScrollEnabled = false
         let settingXib = UINib(nibName: SettingTableViewCell.identifier, bundle: nil)
         settingTableView.register(settingXib, forCellReuseIdentifier: SettingTableViewCell.identifier)
         
