@@ -21,7 +21,7 @@ class ResentSearchTableViewCell: UITableViewCell {
     
     func configureUI() {
         backgroundColor = .black
-//        selectionStyle = .none
+        selectionStyle = .none
         
         searchImageView.image = UIImage(systemName: "magnifyingglass")
         searchImageView.tintColor = .labelColor

@@ -85,9 +85,6 @@
                             <constraint firstItem="4Pg-pp-96x" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vx8-oa-rZl"/>
                             <constraint firstItem="g58-lj-C7X" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="wnz-rE-sVO"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="3Yk-Y6-aez" appends="YES" id="dxb-OW-Myo"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="Asr-rN-GTZ"/>
                     <connections>

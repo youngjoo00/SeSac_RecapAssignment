@@ -119,7 +119,6 @@ extension SearchViewController {
             switch response.result {
             case .success(let data):
                 if self.start == 1 {
-                
                     self.searchList = data
                     self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
                     self.total = data.total
@@ -141,8 +140,8 @@ extension SearchViewController {
 //                }
                 
             case .failure(let failure):
-                // 시간 남으면 검색 결과가 없을때 처리해주자
                 print(failure)
+                
             }
             
         }

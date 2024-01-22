@@ -38,7 +38,6 @@ class MainViewController: UIViewController {
         defalutNavUI(title: "\(nickname)님의 새싹쇼핑")
         
         checkedSearchList()
-        print(searchList)
     }
     
     @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
@@ -88,6 +87,7 @@ extension MainViewController {
     func configureTableView() {
         recentSearchTableView.delegate = self
         recentSearchTableView.dataSource = self
+        recentSearchTableView.delaysContentTouches = false
         recentSearchTableView.backgroundColor = .clear
         let xib = UINib(nibName: ResentSearchTableViewCell.identifier, bundle: nil)
         recentSearchTableView.register(xib, forCellReuseIdentifier: ResentSearchTableViewCell.identifier)
@@ -151,7 +151,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    // 분명 작동은 되는데, 왜 터치가 잘 안먹히는건지 모르겠습니다,,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let vc = storyboard?.instantiateViewController(identifier: SearchViewController.identifier) as! SearchViewController
