@@ -79,7 +79,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         content.badge = 0
         
         var component = DateComponents()
-        component.hour = 24
+        component.hour = 12
         
         let calendarTrigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: true)
        
