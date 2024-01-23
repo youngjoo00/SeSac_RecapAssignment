@@ -45,6 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             window?.makeKeyAndVisible()
         }
+
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -69,10 +70,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
     }
 
+    // 앱이 백그라운드로 진입했을때 기준으로 24시간 뒤 노티알람 보내기
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+
+        let content = UNMutableNotificationContent()
+        content.title = "SeSac Shopping"
+        content.body = "쇼핑리스트를 관리 해보세요!!"
+        content.badge = 0
+        
+        var component = DateComponents()
+        component.hour = 24
+        
+        let calendarTrigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: true)
+       
+        let request = UNNotificationRequest(identifier: "\(Date())", content: content, trigger: calendarTrigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 
 

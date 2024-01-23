@@ -84,11 +84,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             
         } else if section == 1 && indexPath.row == Setting.allCases[indexPath.section].settingCellData.count-1 {
 
-            let alert = UIAlertController(title: "처음부터 시작하기", message: "데이터를 모두 초기화하시겠습니까?", preferredStyle: .alert)
-            
-            let cancelBtn = UIAlertAction(title: "취소", style: .cancel)
-            let confirmBtn = UIAlertAction(title: "확인", style: .default) { _ in
-
+            showAlert(title: "처음부터 시작하기", message: "데이터를 모두 초기화하시겠습니까?", btnTitle: "확인") {
+                // 이 부분은 뷰를 그리는 역할이 아닌데..?
+                // 그럼 함수를 따로 만들어서 호출해야하는건가..?
                 for key in UserDefaults.standard.dictionaryRepresentation().keys {
                     UserDefaults.standard.removeObject(forKey: key.description)
                 }
@@ -105,11 +103,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
                 sceneDelegate?.window?.rootViewController = nav
                 sceneDelegate?.window?.makeKeyAndVisible()
             }
-
-            alert.addAction(cancelBtn)
-            alert.addAction(confirmBtn)
-            
-            present(alert, animated: true)
         }
         
     }

@@ -32,7 +32,7 @@ class SearchViewController: UIViewController {
         defalutUI()
         configureUI()
         configureCollectionView()
-        callRequest(text: naviTitle, sort: sort)
+        callRequest()
         selectedBtn(tag: 0)
     }
     
@@ -44,7 +44,7 @@ class SearchViewController: UIViewController {
     @IBAction func sortBtnClicked(_ sender: UIButton) {
         sort = "\(SearchBtn.allCases[sender.tag])"
         start = 1
-        callRequest(text: naviTitle, sort: sort)
+        callRequest()
         selectedBtn(tag: sender.tag)
     }
     
@@ -66,7 +66,7 @@ extension SearchViewController {
     
     func configureUI() {
         totalLabel.textColor = .pointColor
-
+        
         for i in 0..<sortBtns.count {
             designBtn(sortBtns[i], title: SearchBtn.allCases[i].rawValue, tag: i)
         }
@@ -104,49 +104,23 @@ extension SearchViewController {
         searchCollectionView.register(xib, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
     }
     
-    func callRequest(text: String, sort: String) {
-        
-        let query = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        
-        let url = "https://openapi.naver.com/v1/search/shop.json?query=\(query)&display=30&start=\(start)&sort=\(sort)"
-        
-        let headers: HTTPHeaders = [
-            "X-Naver-Client-Id": APIKey.clientID,
-            "X-Naver-Client-Secret": APIKey.clientSecret
-        ]
-        
-        AF.request(url, headers: headers).responseDecodable(of: Search.self) { response in
-            switch response.result {
-            case .success(let data):
-                if self.start == 1 {
-                    self.searchList = data
-                    self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
-                    self.total = data.total
-                    if self.total != 0 {
-                        self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                    }
-                } else {
-                    self.searchList.items.append(contentsOf: data.items)
+    // 이런식으로 써도 되는건가,,?
+    // 사실 이러면 callRequest() 가 달라진게 없는 수준에 가깝다.
+    func callRequest() {
+        SearchAPIManager.shared.callRequest(text: naviTitle, sort: sort, start: start) { data in
+            if data.start == 1 {
+                self.searchList = data
+                self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
+                self.total = data.total
+                if data.total != 0 {
+                    self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 }
-                
-                for i in 0..<self.searchList.items.count {
-                    self.searchList.items[i].title = self.searchList.items[i].title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
-                }
-                
-//                오류 : Cannot assign to property: 'item' is a 'let' constant
-//                이건 왜 오류인가요..?
-//                for item in self.searchList.items {
-//                    item.title = ""
-//                }
-                
-            case .failure(let failure):
-                print(failure)
-                
+            } else {
+                self.searchList.items.append(contentsOf: data.items)
             }
-            
         }
-        
     }
+        
 }
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
@@ -155,7 +129,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         for item in indexPaths {
             if searchList.items.count - 3 == item.row && searchList.items.count < total {
                 start += 30
-                callRequest(text: naviTitle, sort: sort)
+                callRequest()
             }
         }
     }

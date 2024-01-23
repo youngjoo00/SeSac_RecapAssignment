@@ -14,6 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         UITabBar.appearance().tintColor = UIColor(red: 73/255, green: 220/255, blue: 146/255, alpha: 1)
         UITabBar.appearance().unselectedItemTintColor = .white
+        
+        // 알림 권한 설정
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { success, error in
+            print(success, error)
+        }
+        
         return true
     }
 
