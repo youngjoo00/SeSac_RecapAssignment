@@ -6,16 +6,17 @@
 //
 
 import UIKit
+import SnapKit
 
 class ProfileViewController: UIViewController {
-
-    @IBOutlet var profileImageView: UIImageView!
-    @IBOutlet var cameraImageView: UIImageView!
-    @IBOutlet var nicknameTextField: UITextField!
-    @IBOutlet var validationLabel: UILabel!
-    @IBOutlet var completeBtn: UIButton!
-    @IBOutlet var nicknameLineView: UIView!
-    @IBOutlet var profileBtn: UIButton!
+    
+    let profileImageView = ProfileImageView(frame: .zero)
+    let profileBtn = UIButton()
+    let cameraImageView = UIImageView()
+    let nicknameTextField = UserInputTextField()
+    let validationLabel = PointColorLabel()
+    let completeBtn = PointColorButton()
+    let tapGestureRecognizer = UITapGestureRecognizer()
     
     var imageNumber = UserDefaults.standard.integer(forKey: "profile") {
         didSet {
@@ -25,11 +26,17 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         defalutUI()
-        configureUI()
+        configureHierarchy()
+        configureView()
+        configureLayout()
+        
+        completeBtn.addTarget(self, action: #selector(completeBtnClicked), for: .touchUpInside)
+        
+        profileBtn.addTarget(self, action: #selector(profileBtnClicked), for: .touchUpInside)
     }
-
+    
     // navigationTitel 이 pop 될 경우 타이틀 글자가 사라짐,,
     override func viewWillAppear(_ animated: Bool) {
         defalutNavUI(title: "프로필 설정")
@@ -37,12 +44,8 @@ class ProfileViewController: UIViewController {
         imageNumber = UserDefaults.standard.integer(forKey: "profile")
     }
     
-    @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
-        view.endEditing(true)
-    }
-    
-    @IBAction func completeBtnClicked(_ sender: UIButton) {
-      
+    @objc func completeBtnClicked(_ sender: UIButton) {
+        
         UserDefaults.standard.set(nicknameTextField.text!, forKey: "userNickname")
         UserDefaults.standard.set(true, forKey: "userState")
         
@@ -56,46 +59,86 @@ class ProfileViewController: UIViewController {
         sceneDelegate?.window?.makeKeyAndVisible()
     }
     
-    @IBAction func profileBtnClicked(_ sender: UIButton) {
-        let vc = storyboard?.instantiateViewController(identifier: ProfileSelectViewController.identifier) as! ProfileSelectViewController
+    @objc func profileBtnClicked(_ sender: UIButton) {
+        let vc = ProfileSelectViewController()
         
         vc.selectImageNumber = imageNumber
+        
         navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 extension ProfileViewController {
     
-    func configureUI() {
+    func configureHierarchy() {
+        [
+            profileBtn,
+            profileImageView,
+            cameraImageView,
+            nicknameTextField,
+            cameraImageView,
+            validationLabel,
+            completeBtn,
+        ].forEach { view.addSubview($0) }
+        
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    func configureView() {
         UserDefaults.standard.set(Int.random(in: 0...13), forKey: "profile")
+        
         profileImageView.image = ProfileImage.profileList[imageNumber]
-        profileImageView.layer.borderWidth = 5
-        profileImageView.layer.cornerRadius = profileImageView.frame.width/2
-        profileImageView.layer.borderColor = UIColor.pointColor.cgColor
+        profileImageView.isSelected = true
         
         cameraImageView.image = UIImage(named: "camera")
         
         nicknameTextField.delegate = self
-        nicknameTextField.textColor = .labelColor
-        nicknameTextField.backgroundColor = .clear
-        nicknameTextField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요 :)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-
-        validationLabel.textColor = .pointColor
+        nicknameTextField.configureView(placeholder: "닉네임을 입력해주세요 :)")
+        
         validationLabel.font = .systemFont(ofSize: 13)
         
-        completeBtn.backgroundColor = .pointColor
         completeBtn.setTitle("완료", for: .normal)
-        completeBtn.tintColor = .labelColor
-        completeBtn.layer.cornerRadius = 8
         completeBtn.isEnabled = false
         
         validationLabel.text = "2글자 이상 10글자 미만으로 설정해주세요"
         
-        nicknameLineView.backgroundColor = .lightGray
+        tapGestureRecognizer.delegate = self
         
-        profileBtn.setTitle("", for: .normal)
     }
     
+    func configureLayout() {
+        profileImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
+            make.size.equalTo(100)
+        }
+        
+        profileBtn.snp.makeConstraints { make in
+            make.edges.equalTo(profileImageView)
+        }
+        
+        cameraImageView.snp.makeConstraints { make in
+            make.bottom.equalTo(profileImageView)
+            make.trailing.equalTo(profileImageView)
+            make.size.equalTo(30)
+        }
+        
+        nicknameTextField.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(50)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16)
+        }
+        
+        validationLabel.snp.makeConstraints { make in
+            make.top.equalTo(nicknameTextField.underLineView.snp.bottom).offset(12)
+            make.leading.equalTo(view.safeAreaLayoutGuide).inset(16)
+        }
+        
+        completeBtn.snp.makeConstraints { make in
+            make.top.equalTo(validationLabel.snp.bottom).offset(30)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.height.equalTo(44)
+        }
+    }
 }
 
 extension ProfileViewController: UITextFieldDelegate {
@@ -113,4 +156,18 @@ extension ProfileViewController: UITextFieldDelegate {
         view.endEditing(true)
         return true
     }
+}
+
+extension ProfileViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        
+        view.endEditing(true)
+        
+        return true
+    }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    ProfileViewController()
 }

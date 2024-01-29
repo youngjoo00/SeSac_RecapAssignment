@@ -6,42 +6,72 @@
 //
 
 import UIKit
+import SnapKit
+import Then
 
 class OnBoardingViewController: UIViewController {
-    @IBOutlet var titleImageView: UIImageView!
-    @IBOutlet var mainImageView: UIImageView!
-    @IBOutlet var startBtn: UIButton!
+    
+    let titleImageView = UIImageView()
+    let mainImageView = UIImageView()
+    let startBtn = PointColorButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         defalutUI()
-        configureUI()
+        configureHierarchy()
+        configureView()
+        configureLayout()
         
         startBtn.addTarget(self, action: #selector(startBtnClicked), for: .touchUpInside)
     }
     
     @objc func startBtnClicked() {
-        let sb = UIStoryboard(name: "Profile", bundle: nil)
         
-        let vc = sb.instantiateViewController(withIdentifier: ProfileViewController.identifier) as! ProfileViewController
-        
-        navigationController?.pushViewController(vc, animated: true)
-        
-        
+        navigationController?.pushViewController(ProfileViewController(), animated: true)
     }
 }
 
 extension OnBoardingViewController {
     
-    func configureUI() {
-        titleImageView.image = UIImage(named: "sesacShopping")
-        startBtn.setTitle("시작하기", for: .normal)
-        startBtn.setTitleColor(.labelColor, for: .normal)
-        startBtn.backgroundColor = .pointColor
-        startBtn.layer.cornerRadius = 8
+    func configureHierarchy() {
         
-        mainImageView.image = UIImage(named: "onboarding")
-        mainImageView.contentMode = .scaleAspectFill
+        [
+            titleImageView,
+            mainImageView,
+            startBtn,
+        ].forEach { view.addSubview($0) }
+        
     }
+    
+    func configureView() {
+        titleImageView.configureImageView(image: UIImage(named: "sesacShopping"), cornerRadius: 0)
+        
+        mainImageView.configureImageView(image: UIImage(named: "onboarding"), cornerRadius: 0)
+        mainImageView.contentMode = .scaleAspectFill
+        
+        startBtn.setTitle("시작하기", for: .normal)
+    }
+    
+    func configureLayout() {
+        titleImageView.snp.makeConstraints { make in
+            make.bottom.equalTo(mainImageView.snp.top).offset(-20)
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        mainImageView.snp.makeConstraints { make in
+            make.center.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        startBtn.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.height.equalTo(44)
+        }
+    }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    OnBoardingViewController()
 }

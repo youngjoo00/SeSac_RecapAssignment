@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
       
-//        UserDefaults.standard.set(false, forKey: "userState")
+        UserDefaults.standard.set(false, forKey: "userState")
 //        
 //        UserDefaults.standard.setValue(0, forKey: "likeCount")
         
@@ -25,11 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             window = UIWindow(windowScene: scene)
             
-            let sb = UIStoryboard(name: "OnBoarding", bundle: nil)
-            let nav = sb.instantiateViewController(identifier: "OnBoardingNavigationController") as! UINavigationController
+            let OnBoarding = UINavigationController(rootViewController: OnBoardingViewController())
             
-            window?.rootViewController = nav
-            
+            window?.rootViewController = OnBoarding
             window?.makeKeyAndVisible()
         } else {
             guard let scene = (scene as? UIWindowScene) else { return }
@@ -70,7 +68,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to undo the changes made on entering the background.
     }
 
-    // 앱이 백그라운드로 진입했을때 기준으로 24시간 뒤 노티알람 보내기
+    // 앱이 백그라운드로 진입했을때 12시에 노티알람 보내기
     func sceneDidEnterBackground(_ scene: UIScene) {
 
         let content = UNMutableNotificationContent()

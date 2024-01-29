@@ -92,12 +92,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
                 
-                let sb = UIStoryboard(name: "OnBoarding", bundle: nil)
-                let vc = sb.instantiateViewController(identifier: OnBoardingViewController.identifier) as! OnBoardingViewController
+                let OnBoarding = UINavigationController(rootViewController: OnBoardingViewController())
                 
-                let nav = UINavigationController(rootViewController: vc)
-                
-                sceneDelegate?.window?.rootViewController = nav
+                sceneDelegate?.window?.rootViewController = OnBoarding
                 sceneDelegate?.window?.makeKeyAndVisible()
             }
         }

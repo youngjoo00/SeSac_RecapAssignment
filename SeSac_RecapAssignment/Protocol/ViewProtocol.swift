@@ -10,6 +10,10 @@ import UIKit
 protocol ViewProtocol {
     func defalutUI()
     func defalutNavUI(title: String)
+    
+//    func configureHierarchy()
+//    func configureView()
+//    func configureConstraints()
 }
 
 protocol CellProtocol {

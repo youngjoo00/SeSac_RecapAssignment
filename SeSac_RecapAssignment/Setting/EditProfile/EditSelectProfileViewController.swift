@@ -28,9 +28,9 @@ class EditSelectProfileViewController: UIViewController {
         configureUI()
     }
     
-    @objc func viewTapped(_ sender: UITapGestureRecognizer) {
-        ProfileImage.configureSelectedView(profileImageViews: profileImageView, mainImageView: mainImageView, userDefaultsKey: "tempProfile", selectedImageViewTag: sender.view!.tag)
-    }
+//    @objc func viewTapped(_ sender: UITapGestureRecognizer) {
+//        ProfileImage.configureSelectedView(profileImageViews: profileImageView, mainImageView: mainImageView, selectedItem: <#Int#>, userDefaultsKey: "tempProfile", selectedImageViewTag: sender.view!.tag)
+//    }
     
 }
 
@@ -38,12 +38,12 @@ extension EditSelectProfileViewController {
     
     func configureUI() {
         
-        ProfileImage.configureMainView(mainImageView, index: selectImageNumber)
-        ProfileImage.configureViews(profileImageView, index: selectImageNumber)
+        //ProfileImage.configureMainView(mainImageView, index: selectImageNumber)
+        //ProfileImage.configureViews(profileImageView, index: selectImageNumber)
         
-        for i in 0..<profileImageView.count {
-            profileImageView[i].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
-        }
+//        for i in 0..<profileImageView.count {
+//            profileImageView[i].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
+//        }
     }
     
 }
