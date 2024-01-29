@@ -24,6 +24,9 @@ class ProfileSelectViewController: UIViewController {
         configureHierarchy()
         configureView()
         configureLayout()
+        
+        // selectItem 으로 셀을 선택한다 (cell.isSelect 를 직접 true 지정하기 위함)
+        profileCollectionView.selectItem(at: IndexPath(row: selectImageNumber, section: 0), animated: false, scrollPosition: .top)
     }
     
 }
@@ -85,6 +88,7 @@ extension ProfileSelectViewController: UICollectionViewDelegate, UICollectionVie
         let cell = profileCollectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.identifier, for: indexPath) as! ProfileCollectionViewCell
         
         cell.profileImageView.image = ProfileImage.profileList[indexPath.item]
+        cell.profileImageView.isSelected = cell.isSelected
         
         return cell
     }

@@ -77,8 +77,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         let section = Setting.allCases[indexPath.section].rawValue
         if section == 0 {
             // 프로필 변경 화면
-            let sb = UIStoryboard(name: "EditProfile", bundle: nil)
-            let vc = sb.instantiateViewController(identifier: EditProfileViewController.identifier) as! EditProfileViewController
+            let vc = EditProfileViewController()
             
             navigationController?.pushViewController(vc, animated: true)
             

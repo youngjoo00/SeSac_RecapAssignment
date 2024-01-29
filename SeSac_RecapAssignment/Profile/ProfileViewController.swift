@@ -160,10 +160,7 @@ extension ProfileViewController: UITextFieldDelegate {
 
 extension ProfileViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        
-        view.endEditing(true)
-        
-        return true
+        return view.endEditing(true)
     }
 }
 
