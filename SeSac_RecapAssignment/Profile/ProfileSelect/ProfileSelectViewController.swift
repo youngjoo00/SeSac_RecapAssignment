@@ -111,8 +111,3 @@ extension ProfileSelectViewController: UICollectionViewDelegate, UICollectionVie
         cell.profileImageView.isSelected = cell.isSelected
     }
 }
-
-@available(iOS 17.0, *)
-#Preview {
-    ProfileSelectViewController()
-}
