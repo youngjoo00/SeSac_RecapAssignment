@@ -34,6 +34,8 @@ class SearchViewController: UIViewController {
         configureCollectionView()
         callRequest()
         selectedBtn(tag: 0)
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,23 +106,45 @@ extension SearchViewController {
         searchCollectionView.register(xib, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
     }
     
-    // 이런식으로 써도 되는건가,,?
-    // 사실 이러면 callRequest() 가 달라진게 없는 수준에 가깝다.
+    
     func callRequest() {
-        SearchAPIManager.shared.callRequest(text: naviTitle, sort: sort, start: start) { data in
-            if data.start == 1 {
-                self.searchList = data
-                self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
-                self.total = data.total
-                if data.total != 0 {
-                    self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+        SearchSessionManager.shared.callRequest(type: Search.self, text: naviTitle, sort: sort, start: start) { data, error in
+            if var data = data {
+                for i in 0..<data.items.count {
+                    data.items[i].title = data.items[i].title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+                }
+                if data.start == 1 {
+                    self.searchList = data
+                    self.totalLabel.text = "\(Formatter.numberFormatter.string(for: data.total)!) 개의 검색 결과"
+                    self.total = data.total
+                    if data.total != 0 {
+                        self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                    }
+                } else {
+                    self.searchList.items.append(contentsOf: data.items)
                 }
             } else {
-                self.searchList.items.append(contentsOf: data.items)
+                guard let error = error else { return }
+                print(error)
             }
+            
         }
     }
-        
+//    func callRequest() {
+//        SearchAPIManager.shared.callRequest(text: naviTitle, sort: sort, start: start) { data in
+//            if data.start == 1 {
+//                self.searchList = data
+//                self.totalLabel.text = "\(MyNumberFormatter.shared.string(for: data.total)!) 개의 검색 결과"
+//                self.total = data.total
+//                if data.total != 0 {
+//                    self.searchCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+//                }
+//            } else {
+//                self.searchList.items.append(contentsOf: data.items)
+//            }
+//        }
+//    }
+    
 }
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {

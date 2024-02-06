@@ -60,7 +60,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
         
         titleLabel.text = data.title
         
-        priceLabel.text = MyNumberFormatter.shared.string(for: Int(data.lprice)) ?? "0"
+        priceLabel.text = Formatter.numberFormatter.string(for: Int(data.lprice)) ?? "0"
 
     }
 }

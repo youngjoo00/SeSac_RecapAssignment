@@ -34,6 +34,8 @@ class EditProfileViewController: UIViewController {
         completeBtn.addTarget(self, action: #selector(completeBtnClicked), for: .touchUpInside)
         
         profileBtn.addTarget(self, action: #selector(profileBtnClicked), for: .touchUpInside)
+        
+        Validation.completeBtnChecked(completeBtn, text: nicknameTextField.text!)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -90,6 +92,7 @@ extension EditProfileViewController {
         
         nicknameTextField.delegate = self
         nicknameTextField.configureView(placeholder: "닉네임을 입력해주세요 :)")
+        nicknameTextField.text = UserDefaults.standard.string(forKey: "userNickname")
         
         validationLabel.font = .systemFont(ofSize: 13)
         
@@ -139,12 +142,30 @@ extension EditProfileViewController {
 
 extension EditProfileViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        validationLabel.text = Validation.textField(text: textField.text!)
+        guard let text = textField.text else { return }
+        
+        do {
+            let result = try Validation.textField(text: text)
+            validationLabel.text = result
+        } catch {
+            guard let error = error as? ValidationError else { return }
+            validationLabel.text = error.rawValue
+        }
+        
         Validation.completeBtnChecked(completeBtn, text: validationLabel.text!)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        validationLabel.text = Validation.textField(text: textField.text!)
+        guard let text = textField.text else { return }
+        
+        do {
+            let result = try Validation.textField(text: text)
+            validationLabel.text = result
+        } catch {
+            guard let error = error as? ValidationError else { return }
+            validationLabel.text = error.rawValue
+        }
+        
         Validation.completeBtnChecked(completeBtn, text: validationLabel.text!)
     }
     
@@ -158,9 +179,4 @@ extension EditProfileViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return view.endEditing(true)
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    EditProfileViewController()
 }

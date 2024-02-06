@@ -35,6 +35,8 @@ class ProfileViewController: UIViewController {
         completeBtn.addTarget(self, action: #selector(completeBtnClicked), for: .touchUpInside)
         
         profileBtn.addTarget(self, action: #selector(profileBtnClicked), for: .touchUpInside)
+
+        Validation.completeBtnChecked(completeBtn, text: nicknameTextField.text!)
     }
     
     // navigationTitel 이 pop 될 경우 타이틀 글자가 사라짐,,
@@ -143,12 +145,30 @@ extension ProfileViewController {
 
 extension ProfileViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        validationLabel.text = Validation.textField(text: textField.text!)
+        guard let text = textField.text else { return }
+        
+        do {
+            let result = try Validation.textField(text: text)
+            validationLabel.text = result
+        } catch {
+            guard let error = error as? ValidationError else { return }
+            validationLabel.text = error.rawValue
+        }
+        
         Validation.completeBtnChecked(completeBtn, text: validationLabel.text!)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        validationLabel.text = Validation.textField(text: textField.text!)
+        guard let text = textField.text else { return }
+        
+        do {
+            let result = try Validation.textField(text: text)
+            validationLabel.text = result
+        } catch {
+            guard let error = error as? ValidationError else { return }
+            validationLabel.text = error.rawValue
+        }
+        
         Validation.completeBtnChecked(completeBtn, text: validationLabel.text!)
     }
     
@@ -162,9 +182,4 @@ extension ProfileViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return view.endEditing(true)
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    ProfileViewController()
 }

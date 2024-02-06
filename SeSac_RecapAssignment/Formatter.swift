@@ -6,15 +6,10 @@
 //
 
 import Foundation
-
-class MyNumberFormatter {
-    
-    private init() {}
-    
-    // 클로저를 선언하고, 즉시 실행함으로써 변수에 formatter 라는 값을 리턴
-    static let shared: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
-    }()
+import Then
+enum Formatter {
+        
+    static let numberFormatter = NumberFormatter().then {
+        $0.numberStyle = .decimal
+    }
 }

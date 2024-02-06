@@ -70,8 +70,3 @@ extension OnBoardingViewController {
         }
     }
 }
-
-@available(iOS 17.0, *)
-#Preview {
-    OnBoardingViewController()
-}
