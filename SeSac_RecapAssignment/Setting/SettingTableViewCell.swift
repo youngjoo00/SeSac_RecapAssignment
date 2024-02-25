@@ -6,21 +6,30 @@
 //
 
 import UIKit
+import Then
 
-class SettingTableViewCell: UITableViewCell {
+class SettingTableViewCell: BaseTableViewCell {
 
-    @IBOutlet var titleLabel: UILabel!
+    let titleLabel = UILabel().then {
+        $0.textColor = .labelColor
+    }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func configureHierarchy() {
+        [
+            titleLabel
+        ].forEach { contentView.addSubview($0) }
+    }
+    
+    override func configureLayout() {
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(20)
+            make.height.equalTo(20)
+        }
+    }
+    
+    override func configureView() {
         
-        defalutUI()
-        configureCell()
     }
-    
-    func configureCell() {
-        titleLabel.textColor = .labelColor
-    }
-    
     
 }

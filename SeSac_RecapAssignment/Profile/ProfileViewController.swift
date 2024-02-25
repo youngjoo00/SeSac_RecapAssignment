@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import SnapKit
 
 class ProfileViewController: BaseViewController {
     
     let mainView = ProfileView()
+    let viewModel = ProfileViewModel()
     
     override func loadView() {
         self.view = mainView
@@ -25,7 +25,16 @@ class ProfileViewController: BaseViewController {
         mainView.completeBtn.addTarget(self, action: #selector(completeBtnClicked), for: .touchUpInside)
         mainView.profileBtn.addTarget(self, action: #selector(profileBtnClicked), for: .touchUpInside)
 
-        Validation.completeBtnChecked(mainView.completeBtn, text: mainView.nicknameTextField.text!)
+        mainView.nicknameTextField.addTarget(self, action: #selector(nicknameTextFieldChanged), for: .editingChanged)
+        
+        viewModel.outputValidText.bind { value in
+            self.mainView.validationLabel.text = value
+        }
+        
+        viewModel.outputValid.bind { value in
+            self.mainView.validationLabel.textColor = value ? .pointColor : .red
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,17 +45,31 @@ class ProfileViewController: BaseViewController {
     
     @objc func completeBtnClicked(_ sender: UIButton) {
         
-        UserDefaults.standard.set(mainView.nicknameTextField.text!, forKey: "userNickname")
-        UserDefaults.standard.set(true, forKey: "userState")
+        if viewModel.outputValid.value {
+            
+            guard let nickname = mainView.nicknameTextField.text else { return }
+            viewModel.saveUserDefaults(nickname: nickname, state: true)
+            
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            
+            let tabBar = UITabBarController()
+            let sb = UIStoryboard(name: "Main", bundle: nil)
+            let firstTab = sb.instantiateViewController(withIdentifier: "MainNavigationController")
+
+            let firstTabBarItem = UITabBarItem(title: "검색", image: UIImage(systemName: "magnifyingglass"), tag: 0)
+            firstTab.tabBarItem = firstTabBarItem
+
+            let secondTab = UINavigationController(rootViewController: SettingViewController())
+            let secondTabBarItem = UITabBarItem(title: "설정", image: UIImage(systemName: "person"), tag: 1)
+            secondTab.tabBarItem = secondTabBarItem
+
+            tabBar.viewControllers = [firstTab, secondTab]
+            
+            sceneDelegate?.window?.rootViewController = tabBar
+            sceneDelegate?.window?.makeKeyAndVisible()
+        }
         
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-        let sceneDelegate = windowScene?.delegate as? SceneDelegate
-        
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let tc = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
-        
-        sceneDelegate?.window?.rootViewController = tc
-        sceneDelegate?.window?.makeKeyAndVisible()
     }
     
     @objc func profileBtnClicked(_ sender: UIButton) {
@@ -58,34 +81,18 @@ class ProfileViewController: BaseViewController {
     }
 }
 
-extension ProfileViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
-        do {
-            let result = try Validation.textField(text: text)
-            mainView.validationLabel.text = result
-        } catch {
-            guard let error = error as? ValidationError else { return }
-            mainView.validationLabel.text = error.rawValue
-        }
-        
-        Validation.completeBtnChecked(mainView.completeBtn, text: mainView.validationLabel.text!)
+
+extension ProfileViewController {
+    
+    @objc func nicknameTextFieldChanged() {
+        viewModel.inputNickname.value = mainView.nicknameTextField.text!
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        
-        do {
-            let result = try Validation.textField(text: text)
-            mainView.validationLabel.text = result
-        } catch {
-            guard let error = error as? ValidationError else { return }
-            mainView.validationLabel.text = error.rawValue
-        }
-        
-        Validation.completeBtnChecked(mainView.completeBtn, text: mainView.validationLabel.text!)
-    }
+}
+
+
+// MARK: - UITextField
+extension ProfileViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
@@ -93,7 +100,10 @@ extension ProfileViewController: UITextFieldDelegate {
     }
 }
 
+
+// MARK: - UIGesture
 extension ProfileViewController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return view.endEditing(true)
     }

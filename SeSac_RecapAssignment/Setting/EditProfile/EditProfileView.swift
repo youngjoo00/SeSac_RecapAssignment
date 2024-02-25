@@ -1,13 +1,13 @@
 //
-//  ProfileView.swift
+//  EditProfileView.swift
 //  SeSac_RecapAssignment
 //
-//  Created by youngjoo on 2/7/24.
+//  Created by youngjoo on 2/25/24.
 //
 
 import UIKit
 
-class ProfileView: BaseView {
+class EditProfileView: BaseView {
     
     let profileImageView = ProfileImageView(frame: .zero)
     let profileBtn = UIButton()
@@ -71,18 +71,22 @@ class ProfileView: BaseView {
         }
     }
     
+    
     override func configureView() {
-        UserDefaults.standard.set(Int.random(in: 0...13), forKey: "profile")
-        
         profileImageView.image = ProfileImage.profileList[imageNumber]
         profileImageView.isSelected = true
         
         cameraImageView.image = UIImage(named: "camera")
         
         nicknameTextField.configureView(placeholder: "닉네임을 입력해주세요 :)")
+        nicknameTextField.text = UserDefaults.standard.string(forKey: "userNickname")
         
         validationLabel.font = .systemFont(ofSize: 13)
         
         completeBtn.setTitle("완료", for: .normal)
+        
+        validationLabel.text = "2글자 이상 10글자 미만으로 설정해주세요"
     }
+    
+    
 }

@@ -14,9 +14,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
       
-//        UserDefaults.standard.set(false, forKey: "userState")
-//        
-//        UserDefaults.standard.setValue(0, forKey: "likeCount")
+        //UserDefaults.standard.set(false, forKey: "userState")
+        
+        //UserDefaults.standard.setValue(0, forKey: "likeCount")
         
         let value = UserDefaults.standard.bool(forKey: "userState")
 
@@ -34,12 +34,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             window = UIWindow(windowScene: scene)
             
+            let tabBar = UITabBarController()
             let sb = UIStoryboard(name: "Main", bundle: nil)
-            
-            // tabbarController 불러오기
-            let vc = sb.instantiateViewController(identifier: "MainTabBarController") as! UITabBarController
+            let firstTab = sb.instantiateViewController(withIdentifier: "MainNavigationController")
+
+            let firstTabBarItem = UITabBarItem(title: "검색", image: UIImage(systemName: "magnifyingglass"), tag: 0)
+            firstTab.tabBarItem = firstTabBarItem
+
+            let secondTab = UINavigationController(rootViewController: SettingViewController())
+            let secondTabBarItem = UITabBarItem(title: "설정", image: UIImage(systemName: "person"), tag: 1)
+            secondTab.tabBarItem = secondTabBarItem
+
+            tabBar.viewControllers = [firstTab, secondTab]
                     
-            window?.rootViewController = vc
+            window?.rootViewController = tabBar
             
             window?.makeKeyAndVisible()
         }

@@ -9,7 +9,13 @@ import UIKit
 
 class SettingViewController: UIViewController {
 
-    @IBOutlet var settingTableView: UITableView!
+    let mainView = SettingView()
+    let viewModel = SettingViewModel()
+    
+    override func loadView() {
+        self.view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,46 +25,40 @@ class SettingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         defalutNavUI(title: "설정")
-        settingTableView.reloadData()
+        mainView.tableView.reloadData()
     }
 }
 
 
 extension SettingViewController {
     func configureTableView() {
-        settingTableView.delegate = self
-        settingTableView.dataSource = self
-        settingTableView.backgroundColor = .clear
-        settingTableView.isScrollEnabled = false
-        let settingXib = UINib(nibName: SettingTableViewCell.identifier, bundle: nil)
-        settingTableView.register(settingXib, forCellReuseIdentifier: SettingTableViewCell.identifier)
-        
-        let profileXib = UINib(nibName: SettingProfileTableViewCell.identifier, bundle: nil)
-        settingTableView.register(profileXib, forCellReuseIdentifier: SettingProfileTableViewCell.identifier)
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
     }
 }
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Setting.allCases.count
+        return viewModel.numberOfsections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Setting.allCases[section].settingCellData.count
+        return viewModel.numberOfRowsInSection(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if Setting.allCases[indexPath.section].rawValue == 0 {
-            let cell = settingTableView.dequeueReusableCell(withIdentifier: SettingProfileTableViewCell.identifier, for: indexPath) as! SettingProfileTableViewCell
+            let cell = mainView.tableView.dequeueReusableCell(withIdentifier: SettingProfileTableViewCell.identifier, for: indexPath) as! SettingProfileTableViewCell
             
-            cell.configureCell()
+            cell.configureView()
+
             return cell
         } else {
-            let cell = settingTableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as! SettingTableViewCell
+            let cell = mainView.tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as! SettingTableViewCell
             
-            cell.titleLabel.text = Setting.allCases[indexPath.section].settingCellData[indexPath.row]
+            cell.titleLabel.text = viewModel.SettingTableViewCell(indexPath: indexPath)
             
             return cell
         }
