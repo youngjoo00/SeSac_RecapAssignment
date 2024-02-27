@@ -11,7 +11,7 @@ class SettingViewController: UIViewController {
 
     let mainView = SettingView()
     let viewModel = SettingViewModel()
-    
+
     override func loadView() {
         self.view = mainView
     }
@@ -86,7 +86,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             showAlert(title: "처음부터 시작하기", message: "데이터를 모두 초기화하시겠습니까?", btnTitle: "확인") {
                 
                 UserDefalutsManager.shared.removeAllUserDefalts()
-                SearchList.list = []
+                self.viewModel.inputRemoveAllSearchList.value = ()
                 
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate

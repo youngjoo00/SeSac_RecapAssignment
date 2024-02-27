@@ -8,7 +8,9 @@
 import UIKit
 import Toast
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
+    
+    private let viewModel = MainViewModel()
     
     @IBOutlet var shopSearchBar: UISearchBar!
     @IBOutlet var shopImageView: UIImageView!
@@ -17,16 +19,10 @@ class MainViewController: UIViewController {
     @IBOutlet var recentSearchAllDeleteBtn: UIButton!
     @IBOutlet var recentSearchTableView: UITableView!
     
-    // SearchList.list 값이 바뀌는걸 감지해서 모두 편하게 바뀌면 코드 효율이 훨씬 좋아질탠데 이 방법말고 다른 방법은 모르겠습니다,,
-    var searchList = SearchList.list {
-        didSet {
-            recentSearchTableView.reloadData()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindData()
         defalutUI()
         configureUI()
         configureTableView()
@@ -34,10 +30,9 @@ class MainViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let nickname = UserDefaults.standard.string(forKey: "userNickname")!
-        defalutNavUI(title: "\(nickname)님의 새싹쇼핑")
+        super.viewWillAppear(animated)
         
-        checkedSearchList()
+        //bindData()
     }
     
     @IBAction func keyboardDismiss(_ sender: UITapGestureRecognizer) {
@@ -47,18 +42,29 @@ class MainViewController: UIViewController {
     @objc func deleteBtnClicked(_ sender: UIButton) {
         let btnPoint = sender.convert(CGPoint.zero, to: recentSearchTableView)
         if let indexPath = recentSearchTableView.indexPathForRow(at: btnPoint) {
-            SearchList.list.remove(at: indexPath.row)
-            checkedSearchList()
+            viewModel.inputDeleteButtonTapped.value = indexPath.row
         }
     }
     
     @objc func searchListAllDeleteBtn() {
-        SearchList.list = []
-        checkedSearchList()
+        viewModel.inputSearchListAllDeleteTapped.value = ()
     }
 }
 
 extension MainViewController {
+    
+    func bindData() {
+        viewModel.inputViewDidLoadTrigger.value = ()
+        
+        viewModel.outputNickname.bind { value in
+            self.defalutNavUI(title: "\(value)님의 새싹쇼핑")
+        }
+        
+        viewModel.outputSearchList.bind { value in
+            self.checkedSearchList()
+            self.recentSearchTableView.reloadData()
+        }
+    }
     
     func configureUI() {
         shopSearchBar.searchBarStyle = .minimal
@@ -94,9 +100,8 @@ extension MainViewController {
     }
     
     func checkedSearchList() {
-        searchList = SearchList.list
-
-        if searchList.isEmpty {
+        
+        if viewModel.outputSearchList.value.isEmpty {
             recentSearchLabel.isHidden = true
             recentSearchAllDeleteBtn.isHidden = true
             recentSearchTableView.isHidden = true
@@ -116,7 +121,6 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         if searchBar.text!.isEmpty {
             var style = ToastStyle()
             style.backgroundColor = .pointColor
@@ -124,13 +128,15 @@ extension MainViewController: UISearchBarDelegate {
             self.view.makeToast("검색어를 입력해주세요!", duration: 2.0, position: .center, style: style)
         } else {
             let vc = storyboard?.instantiateViewController(identifier: SearchViewController.identifier) as! SearchViewController
-            
+
             vc.naviTitle = searchBar.text!
-            SearchList.list.insert(searchBar.text!, at: 0)
+            viewModel.inputSearchListData.value = searchBar.text
+            viewModel.inputSearchBarSearchButtonTapped.value = searchBar.text
             view.endEditing(true)
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
@@ -140,13 +146,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return SearchList.list.count
+        return viewModel.outputSearchList.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recentSearchTableView.dequeueReusableCell(withIdentifier: ResentSearchTableViewCell.identifier, for: indexPath) as! ResentSearchTableViewCell
         
-        cell.configureCell(text: SearchList.list[indexPath.row], tag: indexPath.row)
+        cell.configureCell(text: viewModel.outputSearchList.value[indexPath.row], tag: indexPath.row)
         cell.deleteBtn.addTarget(self, action: #selector(deleteBtnClicked(_:)), for: .touchUpInside)
         return cell
     }
@@ -155,11 +161,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         let vc = storyboard?.instantiateViewController(identifier: SearchViewController.identifier) as! SearchViewController
         
-        let title = SearchList.list[indexPath.row]
+        let title = viewModel.outputSearchList.value[indexPath.row]
         vc.naviTitle = title
         
-        SearchList.list.remove(at: indexPath.row)
-        SearchList.list.insert(title, at: 0)
+        viewModel.inputDidSelectRowAt.value = indexPath.row
+        
         view.endEditing(true)
         navigationController?.pushViewController(vc, animated: true)
     }
